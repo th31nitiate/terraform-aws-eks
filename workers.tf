@@ -180,6 +180,20 @@ data "aws_iam_policy_document" "worker_autoscaling" {
   }
 
   statement {
+    sid    = "logs"
+    effect = "Allow"
+
+    actions = [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams"
+    ]
+
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+
+  statement {
     sid    = "eksWorkerAutoscalingOwn"
     effect = "Allow"
 
