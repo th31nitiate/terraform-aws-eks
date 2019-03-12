@@ -194,6 +194,17 @@ data "aws_iam_policy_document" "worker_autoscaling" {
   }
 
   statement {
+    sid    = ""
+    effect = "Allow"
+
+    actions = [
+        "sts:AssumeRole"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
     sid    = "eksWorkerAutoscalingOwn"
     effect = "Allow"
 
