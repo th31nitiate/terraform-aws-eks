@@ -204,6 +204,30 @@ data "aws_iam_policy_document" "worker_autoscaling" {
     resources = ["*"]
   }
 
+  #Add dns statement for EKS
+  statement {
+    sid = "KubeExtDnsCRT"
+    effect = "Allow"
+
+    actions = [
+      "route53:ChangeResourceRecordSets"
+    ]
+
+    resources = ["arn:aws:route53:::hostedzone/*"]
+  }
+
+  statement {
+    sid = "KubeExtDNS"
+    effect = "Allow"
+
+    actions = [
+       "route53:ListHostedZones",
+       "route53:ListResourceRecordSets"
+    ]
+
+    resources = ["*"]
+  }
+
   statement {
     sid    = "eksWorkerAutoscalingOwn"
     effect = "Allow"
