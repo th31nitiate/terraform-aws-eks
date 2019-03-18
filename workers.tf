@@ -222,7 +222,9 @@ data "aws_iam_policy_document" "worker_autoscaling" {
 
     actions = [
        "route53:ListHostedZones",
-       "route53:ListResourceRecordSets"
+       "route53:ListResourceRecordSets",
+       "route53:GetChange",
+       "route53:ListHostedZonesByName"
     ]
 
     resources = ["*"]
