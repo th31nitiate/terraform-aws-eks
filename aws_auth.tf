@@ -52,36 +52,6 @@ data "template_file" "worker_role_arns" {
   }
 }
 
-data "template_file" "kube_alb_ingress" {
-  template = "${file("${path.module}/templates/iam-assume-role.json.tpl")}"
-
-  vars {
-    worker_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${element(aws_iam_instance_profile.workers.*.role, count.index)}"
-  }
-}
-
-data "template_file" "kube_alb_policy" {
-  template = "${file("${path.module}/templates/iam-policy.json.tpl")}"
-}
-
-resource "aws_iam_role" "kube_role" {
-  name = "k8s-alb-controller"
-
-  assume_role_policy = "${data.template_file.kube_alb_ingress.rendered}"
-}
-
-resource "aws_iam_policy" "kube_alb_policy" {
-  name        = "alb-iam-policy"
-  description = "A test policy"
-
-  policy = "${data.template_file.kube_alb_policy.rendered}"
-}
-
-resource "aws_iam_role_policy_attachment" "attach-alb-policy" {
-  role       = "${aws_iam_role.kube_role.name}"
-  policy_arn = "${aws_iam_policy.kube_alb_policy.arn}"
-}
-
 data "template_file" "config_map_aws_auth" {
   template = "${file("${path.module}/templates/config-map-aws-auth.yaml.tpl")}"
 
